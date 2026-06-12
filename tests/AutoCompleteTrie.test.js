@@ -24,6 +24,14 @@ describe('AutoCompleteTrie', () => {
             expect(trie.root.children['c'].children['a'].children['t'].endOfWord).toBe(true);
         });
 
+        test('should handle case insensitivity by converting to lowercase', () => {
+            trie.addWord('DOG');
+            
+            // מוודאים שהאות הקטנה נוצרה, והגדולה לא קיימת
+            expect(trie.root.children['d']).toBeDefined();
+            expect(trie.root.children['D']).toBeUndefined();
+        });
+
 
 
     });

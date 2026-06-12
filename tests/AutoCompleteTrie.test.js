@@ -47,7 +47,12 @@ describe('AutoCompleteTrie', () => {
             expect(rNode.children['t'].endOfWord).toBe(true);
         });
 
-
+        test('should throw an error for invalid inputs', () => {
+            // כשאנחנו בודקים שגיאות ב-Jest, חובה לעטוף את הקריאה בפונקציה אנונימית
+            expect(() => trie.addWord(123)).toThrow("Invalid input: word must be a string.");
+            expect(() => trie.addWord(null)).toThrow("Invalid input: word must be a string.");
+            expect(() => trie.addWord()).toThrow("Invalid input: word must be a string.");
+        });
 
     });
 });

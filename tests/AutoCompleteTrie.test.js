@@ -32,6 +32,21 @@ describe('AutoCompleteTrie', () => {
             expect(trie.root.children['D']).toBeUndefined();
         });
 
+        test('should reuse existing paths when adding words with the same prefix', () => {
+            trie.addWord('car');
+            trie.addWord('cart'); // מילה שמשתמשת באותה תחילית
+            
+            const cNode = trie.root.children['c'];
+            const aNode = cNode.children['a'];
+            const rNode = aNode.children['r'];
+            
+            // מוודאים ש-r היא סוף המילה 'car'
+            expect(rNode.endOfWord).toBe(true);
+            // מוודאים ש-r ממשיכה ל-t, ושהיא סוף המילה 'cart'
+            expect(rNode.children['t']).toBeDefined();
+            expect(rNode.children['t'].endOfWord).toBe(true);
+        });
+
 
 
     });

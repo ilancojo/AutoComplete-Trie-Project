@@ -1,0 +1,28 @@
+{
+  "name": "autocomplete-trie-project",
+  "version": "1.0.0",
+  "description": "Building a console-based autocomplete application using a Trie (prefix tree) data structure. The app will suggest word completions based on user input, similar to how search engines work.",
+  "main": "index.js",
+"scripts": {
+  "start": "node src/index.js",
+  "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ilancojo/AutoComplete-Trie-Project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/ilancojo/AutoComplete-Trie-Project/issues"
+  },
+  "homepage": "https://github.com/ilancojo/AutoComplete-Trie-Project#readme",
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
+  },
+  "devDependencies": {
+    "jest": "^30.4.2"
+  }
+}

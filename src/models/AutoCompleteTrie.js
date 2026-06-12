@@ -2,8 +2,8 @@ import { TrieNode } from "./TrieNode.js";
 
 export class AutoCompleteTrie {
     constructor() {
-        // השורש הוא תמיד צומת ריק שממנו מתחילים כל החיפושים
-        this.root = new TrieNode();
+    
+        this.root = new TrieNode();  // השורש הוא תמיד צומת ריק שממנו מתחילים כל החיפושים
     }
 
     addWord(word) {

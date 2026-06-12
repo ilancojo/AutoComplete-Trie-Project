@@ -7,12 +7,3 @@ export class TrieNode {
 }
 
 
-
-/**
- *       addWord(word) {
-        word.forEach(char => {
-            let newCharNode = new TrieNode(char);
-
-      })};
- */
-

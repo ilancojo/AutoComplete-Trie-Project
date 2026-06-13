@@ -56,3 +56,17 @@ describe('AutoCompleteTrie', () => {
 
     });
 });
+
+describe('findWord()', () => {
+        
+        test('should return true for words that exist in the trie', () => {
+            trie.addWord('hello');
+            trie.addWord('world');
+            
+            expect(trie.findWord('hello')).toBe(true);
+            expect(trie.findWord('world')).toBe(true);
+        });
+
+
+
+    });

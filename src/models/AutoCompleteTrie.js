@@ -34,6 +34,10 @@ export class AutoCompleteTrie {
 
     findWord(word){
 
+        // נוודא שהקלט תקין (הגנה מפני קריסת המערכת)
+        if (!word || typeof word !== 'string') {
+            throw new Error("Invalid input: word must be a string.");
+        }
         let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
         word = word.toLowerCase();
 
@@ -42,16 +46,14 @@ export class AutoCompleteTrie {
             if (!currentNode.children[char]) { // אם האות לא קיימת בילדים של הצומת הנוכחי, ניצור עבורה צומת חדש
                 return false
              }
-             
+                         // מתקדמים לצומת הבא
              currentNode = currentNode.children[char]; 
         
-        }
+        }        
+        // החזרת הסטטוס של האות האחרונה (האם היא מסומנת כסוף מילה?)
         return currentNode.endOfWord       
 
     }
-
-
-
 
 
 

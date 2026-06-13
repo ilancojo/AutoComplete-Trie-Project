@@ -6,7 +6,7 @@ export class AutoCompleteTrie {
         this.root = new TrieNode();  // השורש הוא תמיד צומת ריק שממנו מתחילים כל החיפושים
     }
 
-    // --- מתודת עזר לולידציה (DRY) ---
+    // --- מתודת עזר לולידציה  ---
     _validateAndFormat(word) {
         if (!word || typeof word !== 'string') { // נוודא שהקלט תקין (הגנה בסיסית מפני שstringגיאות)
             throw new Error("Invalid input: word must be a string.");
@@ -14,7 +14,7 @@ export class AutoCompleteTrie {
         return word.toLowerCase();// המרה לאותיות קטנות כדי לשמור על אחידות (Case Insensitive)
     }
 
-    ddWord(word) {
+    addWord(word) {
         word = this._validateAndFormat(word); 
         let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
         
@@ -61,6 +61,20 @@ export class AutoCompleteTrie {
             currentNode = currentNode.children[char];
         }
         return currentNode;// מחזירים את הצומת האחרון שהגענו אליו
+    }
+
+
+_allWordsHelper(prefix, node, allWords) {
+        // אם הגענו לסוף מילה, נוסיף את התחילית הנוכחית למערך התוצאות
+        if (node.endOfWord === true) {
+             allWords.push(prefix); 
+        }
+        
+        // עוברים על כל הילדים (האותיות הבאות) של הצומת הנוכחי
+        for (const char in node.children) {
+            // קריאה רקורסיבית עם התחילית המעודכנת והצומת הבא
+            this._allWordsHelper(prefix + char, node.children[char], allWords);
+        }
     }
 
 

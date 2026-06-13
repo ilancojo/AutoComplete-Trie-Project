@@ -86,6 +86,65 @@ describe('AutoCompleteTrie', () => {
             expect(() => trie.findWord(null)).toThrow("Invalid input: word must be a string.");
         });
 
+        // --- טסטים עבור פונקציות עזר ---
+    describe('Helper Methods', () => {
+        
+        // נוסיף כמה מילים שנוכל לעבוד איתן בכל הטסטים של פונקציות העזר
+        beforeEach(() => {
+            trie.addWord('car');
+            trie.addWord('card');
+            trie.addWord('cat');
+            trie.addWord('dog');
+        });
+
+        describe('_getRemainingTree()', () => {
+            test('should return the correct node for a valid prefix', () => {
+                // נחפש את התחילית 'ca'
+                const node = trie._getRemainingTree('ca');
+                
+                // נוודא שקיבלנו צומת תקין בחזרה
+                expect(node).toBeDefined();
+                expect(node).not.toBeNull();
+                
+                // נוודא שהצומת הזה באמת מכיל את ההמשכים 'r' ו-'t'
+                expect(node.children['r']).toBeDefined();
+                expect(node.children['t']).toBeDefined();
+            });
+
+            test('should return null for a prefix that does not exist', () => {
+                const node = trie._getRemainingTree('z');
+                expect(node).toBeNull();
+            });
+        });
+
+        describe('_allWordsHelper()', () => {
+            test('should collect all words starting from a specific node', () => {
+                // שלב א: נשיג את הצומת של התחילית 'ca'
+                const startNode = trie._getRemainingTree('ca');
+                const words = [];
+                
+                // שלב ב: נפעיל את הרקורסיה מנקודה זו
+                trie._allWordsHelper('ca', startNode, words);
+
+                // שלב ג: נוודא שכל המילים נאספו למערך
+                expect(words.length).toBe(3);
+                expect(words).toContain('car');
+                expect(words).toContain('card');
+                expect(words).toContain('cat');
+            });
+        });
+
+    });
     });
 
+
+
+
+
+
+
+
+
+
+    
 });

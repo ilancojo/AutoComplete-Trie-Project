@@ -1,5 +1,8 @@
 import { AutoCompleteTrie } from '../models/AutoCompleteTrie.js';
 import { ConsoleView } from '../views/ConsoleView.js';
+import { MESSAGES } from '../constants/messages.js';
+import { parseCommand, validateInput } from '../utils/helpers.js';
+import { ValidationError } from '../errors/CustomErrors.js';
 
 export class AppController {
     constructor() {
@@ -8,36 +11,70 @@ export class AppController {
     }
 
     init() {
-        this.view.displayMessage("Welcome to the autocomplete dictionary!");
-        this.view.displayMessage("Type 'exit' to exit.");
-        
-        // טעינת מילים התחלתיות למילון
-        const initialWords = ["hello", "help", "helmet", "hero", "cat", "car", "cart", "dog"];
-        for (const word of initialWords) {
-            this.trie.addWord(word);
-        }
-
-        this.run(); // הפעלת לולאת התוכנית
-
+        this.view.displayMessage(MESSAGES.WELCOME);
+        this.run();
     }
 
     run() {
         while (true) {
-            const prefix = this.view.getUserInput("\nEnter a search prefix: ");
+            // קבלת הקלט עם סימן הפרומפט >
+            const input = this.view.getUserInput(MESSAGES.PROMPT);
             
-            if (prefix.toLowerCase() === 'exit') {
-                this.view.displayMessage("Good by!");
-                break;
-            }
+            // דילוג אם המשתמש רק לחץ אנטר
+            if (!input) continue;
+
+            // פירוק הקלט לפקודה ופרמטר
+            const { command, arg } = parseCommand(input);
 
             try {
-                // הבקר שואב מידע מהמודל ומעביר אותו לתצוגה
-                const predictions = this.trie.predictWords(prefix);
-                this.view.displayPredictions(predictions);
+                if (command === 'exit') {
+                    this.view.displayMessage(MESSAGES.GOODBYE);
+                    break;
+                }
+
+                // ניתוב הפקודות
+                switch (command) {
+                    case 'help':
+                        this.view.displayMessage(MESSAGES.HELP);
+                        break;
+                        
+                    case 'add':
+                        const wordToAdd = validateInput(arg);
+                        this.trie.addWord(wordToAdd);
+                        this.view.displayMessage(MESSAGES.ADDED(wordToAdd));
+                        break;
+                        
+                    case 'find':
+                        const wordToFind = validateInput(arg);
+                        const exists = this.trie.findWord(wordToFind);
+                        if (exists) {
+                            this.view.displayMessage(MESSAGES.FOUND(wordToFind));
+                        } else {
+                            this.view.displayMessage(MESSAGES.NOT_FOUND(wordToFind));
+                        }
+                        break;
+                        
+                    case 'complete':
+                        const prefix = validateInput(arg);
+                        const results = this.trie.predictWords(prefix);
+                        if (results.length > 0) {
+                            this.view.displayMessage(MESSAGES.COMPLETIONS(prefix, results));
+                        } else {
+                            this.view.displayMessage(MESSAGES.NO_COMPLETIONS(prefix));
+                        }
+                        break;
+                        
+                    default:
+                        this.view.displayMessage(MESSAGES.INVALID_CMD);
+                }
             } catch (error) {
-                this.view.displayMessage(`erorr: ${error.message}`);
+                // הצגת שגיאות ולידציה בצורה ברורה למשתמש בלי לקרוס
+                if (error instanceof ValidationError) {
+                    this.view.displayMessage(`✗ Error: ${error.message}`);
+                } else {
+                    this.view.displayMessage(`✗ Unexpected Error: ${error.message}`);
+                }
             }
         }
-        
     }
 }

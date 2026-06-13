@@ -6,55 +6,62 @@ export class AutoCompleteTrie {
         this.root = new TrieNode();  // השורש הוא תמיד צומת ריק שממנו מתחילים כל החיפושים
     }
 
-    addWord(word) {
-       
-        if (!word || typeof word !== 'string') { // נוודא שהקלט תקין (הגנה בסיסית מפני שגיאות)
+    // --- מתודת עזר לולידציה (DRY) ---
+    _validateAndFormat(word) {
+        if (!word || typeof word !== 'string') { // נוודא שהקלט תקין (הגנה בסיסית מפני שstringגיאות)
             throw new Error("Invalid input: word must be a string.");
         }
-        
-        word = word.toLowerCase();// המרה לאותיות קטנות כדי לשמור על אחידות (Case Insensitive)
-        
-        let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
+        return word.toLowerCase();// המרה לאותיות קטנות כדי לשמור על אחידות (Case Insensitive)
+    }
 
-       
+    ddWord(word) {
+        word = this._validateAndFormat(word); 
+        let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
+        
         for (const char of word) {
-           
-            if (!currentNode.children[char]) { // אם האות לא קיימת בילדים של הצומת הנוכחי, ניצור עבורה צומת חדש
+            if (!currentNode.children[char]) {
                 currentNode.children[char] = new TrieNode(char);
             }
-
-            // נקדם את המצביע שלנו לצומת של האות (הקיימת או החדשה שניצור)
-            currentNode = currentNode.children[char];
+            currentNode = currentNode.children[char];// נקדם את המצביע שלנו לצומת של האות (הקיימת או החדשה שניצור)
         }
-
         // כשהלולאה מסתיימת, הגענו לאות האחרונה של המילה
         // נסמן את הצומת הזה כסוף של מילה שלמה
         currentNode.endOfWord = true;
     }
 
     findWord(word){
+        word = this._validateAndFormat(word); 
 
-        // נוודא שהקלט תקין (הגנה מפני קריסת המערכת)
-        if (!word || typeof word !== 'string') {
-            throw new Error("Invalid input: word must be a string.");
-        }
         let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
-        word = word.toLowerCase();
-
+        
         for (const char of word) {
            
             if (!currentNode.children[char]) { // אם האות לא קיימת בילדים של הצומת הנוכחי, ניצור עבורה צומת חדש
-                return false
+                return false;
              }
-                         // מתקדמים לצומת הבא
-             currentNode = currentNode.children[char]; 
-        
+    
+             currentNode = currentNode.children[char];// מתקדמים לצומת הבא 
         }        
         // החזרת הסטטוס של האות האחרונה (האם היא מסומנת כסוף מילה?)
         return currentNode.endOfWord       
 
     }
 
+    _getRemainingTree(prefix) {
+
+        prefix = this._validateAndFormat(prefix);
+        let currentNode = this.root;
+
+        for (const char of prefix) {
+            // אם הגענו לאות שלא קיימת, התחילית כולה לא קיימת בעץ
+            if (!currentNode.children[char]) {
+                return null;    
+            }
+            // מתקדמים בצומת
+            currentNode = currentNode.children[char];
+        }
+        return currentNode;// מחזירים את הצומת האחרון שהגענו אליו
+    }
 
 
 

@@ -55,9 +55,9 @@ describe('AutoCompleteTrie', () => {
         });
 
     });
-});
 
-describe('findWord()', () => {
+
+    describe('findWord()', () => {
         
         test('should return true for words that exist in the trie', () => {
             trie.addWord('hello');
@@ -87,3 +87,5 @@ describe('findWord()', () => {
         });
 
     });
+
+});

@@ -21,4 +21,22 @@ export class AppController {
 
     }
 
+    run() {
+        while (true) {
+            const prefix = this.view.getUserInput("\nEnter a search prefix: ");
+            
+            if (prefix.toLowerCase() === 'exit') {
+                this.view.displayMessage("Good by!");
+                break;
+            }
+
+            try {
+                // הבקר שואב מידע מהמודל ומעביר אותו לתצוגה
+                const predictions = this.trie.predictWords(prefix);
+                this.view.displayPredictions(predictions);
+            } catch (error) {
+                this.view.displayMessage(`erorr: ${error.message}`);
+            }
+        }
+    }
 }

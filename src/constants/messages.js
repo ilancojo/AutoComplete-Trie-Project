@@ -13,5 +13,5 @@ export const MESSAGES = {
     NOT_FOUND: (word) => `✗ '${word}' not found in dictionary`,
     COMPLETIONS: (prefix, results) => `Suggestions for '${prefix}': ${results.join(', ')}`,
     NO_COMPLETIONS: (prefix) => `✗ No suggestions found for '${prefix}'`,
-    PROMPT: "\n> "
+    PROMPT: "> "
 };

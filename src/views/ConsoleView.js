@@ -6,5 +6,19 @@ export class ConsoleView {
         this.prompt = promptSync({ sigint: true }); 
     }
 
+    displayMessage(message) {
+        console.log(message);
+    }
 
+    getUserInput(promptText) {
+        return this.prompt(promptText);
+    }
+
+    displayPredictions(predictions) {
+        if (predictions.length === 0) {
+            this.displayMessage("No perfections found.");
+        } else {
+            this.displayMessage(`Possible completions: [ ${predictions.join(', ')} ]`);
+        }
+    }
 }

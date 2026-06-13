@@ -67,9 +67,13 @@ describe('findWord()', () => {
             expect(trie.findWord('world')).toBe(true);
         });
 
+        test('should return false for words that do not exist', () => {
+            trie.addWord('cat');
+            
+            expect(trie.findWord('dog')).toBe(false); // מילה שלא קשורה
+            expect(trie.findWord('ca')).toBe(false);  // תחילית היא לא מילה שלמה
+        });
 
 
-
-    
 
     });

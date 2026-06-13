@@ -14,3 +14,10 @@ export const parseCommand = (input) => {
     return { command, arg };
 };
 
+// פונקציה שמקבלת מחרוזת, מנקה אותה, מוודאת שהיא לא ריקה ומחזירה אותה באותיות קטנות
+export const validateInput = (word) => {
+    if (!word || typeof word !== 'string' || word.trim() === '') {
+        throw new Error("Input must be a valid, non-empty string.");
+    }
+    return word.trim().toLowerCase();
+};

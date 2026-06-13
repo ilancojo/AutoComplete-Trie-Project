@@ -1,4 +1,6 @@
 import { TrieNode } from "./TrieNode.js";
+import { validateInput } from "../utils/helpers.js";
+
 
 export class AutoCompleteTrie {
     constructor() {
@@ -6,16 +8,10 @@ export class AutoCompleteTrie {
         this.root = new TrieNode();  // השורש הוא תמיד צומת ריק שממנו מתחילים כל החיפושים
     }
 
-    // --- מתודת עזר לולידציה  ---
-    _validateAndFormat(word) {
-        if (!word || typeof word !== 'string') { // נוודא שהקלט תקין (הגנה בסיסית מפני שstringגיאות)
-            throw new Error("Invalid input: word must be a string.");
-        }
-        return word.toLowerCase();// המרה לאותיות קטנות כדי לשמור על אחידות (Case Insensitive)
-    }
+
 
     addWord(word) {
-        word = this._validateAndFormat(word); 
+        word = validateInput(word);  
         let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
         
         for (const char of word) {
@@ -30,8 +26,8 @@ export class AutoCompleteTrie {
     }
 
     findWord(word){
-        word = this._validateAndFormat(word); 
 
+        word = validateInput(word);  
         let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
         
         for (const char of word) {

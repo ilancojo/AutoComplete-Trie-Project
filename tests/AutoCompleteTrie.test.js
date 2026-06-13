@@ -85,10 +85,9 @@ describe('AutoCompleteTrie', () => {
             expect(() => trie.findWord(123)).toThrow("Invalid input: word must be a string.");
             expect(() => trie.findWord(null)).toThrow("Invalid input: word must be a string.");
         });
-
+    });
         // --- טסטים עבור פונקציות עזר ---
-    describe('Helper Methods', () => {
-        
+    describe('Helper Methods', () => {     
         // נוסיף כמה מילים שנוכל לעבוד איתן בכל הטסטים של פונקציות העזר
         beforeEach(() => {
             trie.addWord('car');
@@ -135,7 +134,55 @@ describe('AutoCompleteTrie', () => {
         });
 
     });
+
+    // --- טסטים עבור הפונקציה הראשית: predictWords ---
+    describe('predictWords()', () => {
+        
+        // נכין עץ עם מספר מילים לצורך הבדיקות
+        beforeEach(() => {
+            trie.addWord('cat');
+            trie.addWord('car');
+            trie.addWord('card');
+            trie.addWord('dog');
+        });
+
+        test('should return all possible completions for a valid prefix', () => {
+            const results = trie.predictWords('ca');
+            
+            // מוודאים שקיבלנו בדיוק 3 מילים, ושכולן נכונות
+            expect(results).toHaveLength(3);
+            expect(results).toContain('cat');
+            expect(results).toContain('car');
+            expect(results).toContain('card');
+            
+            // מוודאים שמילה שלא קשורה לא נכנסה בטעות
+            expect(results).not.toContain('dog');
+        });
+
+        test('should return an empty array if the prefix does not exist', () => {
+            const results = trie.predictWords('z');
+            
+            expect(Array.isArray(results)).toBe(true);
+            expect(results).toHaveLength(0);
+        });
+
+        test('should handle case insensitivity correctly', () => {
+            // חיפוש עם אותיות גדולות אמור להחזיר את אותן תוצאות (באותיות קטנות)
+            const results = trie.predictWords('CA');
+            
+            expect(results).toHaveLength(3);
+            expect(results).toContain('car');
+        });
+
+        test('should throw an error for invalid inputs', () => {
+            expect(() => trie.predictWords(123)).toThrow("Invalid input: word must be a string.");
+            expect(() => trie.predictWords(null)).toThrow("Invalid input: word must be a string.");
+            expect(() => trie.predictWords("")).toThrow("Invalid input: word must be a string.");
+        });
+
     });
+    
+
 
 
 

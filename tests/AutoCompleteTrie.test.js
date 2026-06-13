@@ -74,6 +74,16 @@ describe('findWord()', () => {
             expect(trie.findWord('ca')).toBe(false);  // תחילית היא לא מילה שלמה
         });
 
+        test('should handle case insensitivity correctly during search', () => {
+            trie.addWord('JavaScript');
+            
+            expect(trie.findWord('javascript')).toBe(true);
+            expect(trie.findWord('JAVASCRIPT')).toBe(true);
+        });
 
+        test('should throw an error for invalid inputs during search', () => {
+            expect(() => trie.findWord(123)).toThrow("Invalid input: word must be a string.");
+            expect(() => trie.findWord(null)).toThrow("Invalid input: word must be a string.");
+        });
 
     });

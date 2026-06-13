@@ -45,7 +45,7 @@ export class AutoCompleteTrie {
 
     _getRemainingTree(prefix) {
 
-        prefix = this._validateAndFormat(prefix);
+        prefix = validateInput(prefix);
         let currentNode = this.root;
 
         for (const char of prefix) {
@@ -76,7 +76,7 @@ _allWordsHelper(prefix, node, allWords) {
     //"ca" --> [cat , cart , card]
     predictWords(prefix){
         // 1. בדיקת תקינות והמרה
-        prefix = this._validateAndFormat(prefix); 
+        prefix = validateInput(prefix); 
 
         // 2. מציאת נקודת ההתחלה (קריאה לפונקציה פעם אחת בלבד)
         let startNode = this._getRemainingTree(prefix);

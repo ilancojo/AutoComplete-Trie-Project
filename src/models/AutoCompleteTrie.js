@@ -77,6 +77,26 @@ _allWordsHelper(prefix, node, allWords) {
         }
     }
 
+    //"ca" --> [cat , cart , card]
+    predictWords(prefix){
+        // 1. בדיקת תקינות והמרה
+        prefix = this._validateAndFormat(prefix); 
+
+        // 2. מציאת נקודת ההתחלה (קריאה לפונקציה פעם אחת בלבד)
+        let startNode = this._getRemainingTree(prefix);
+
+        // 3. יציאה מוקדמת  אם התחילית לא קיימת
+        if (startNode === null) {
+            return [];
+        }
+
+        // 4. הכנת מערך התוצאות והפעלת הרקורסיה
+        let results = [];
+        this._allWordsHelper(prefix, startNode, results);
+        
+        // 5. החזרת התשובה
+        return results;
+    }
 
 
 }

@@ -49,9 +49,9 @@ describe('AutoCompleteTrie', () => {
 
         test('should throw an error for invalid inputs', () => {
             // כשאנחנו בודקים שגיאות ב-Jest, חובה לעטוף את הקריאה בפונקציה אנונימית
-            expect(() => trie.addWord(123)).toThrow("Invalid input: word must be a string.");
-            expect(() => trie.addWord(null)).toThrow("Invalid input: word must be a string.");
-            expect(() => trie.addWord()).toThrow("Invalid input: word must be a string.");
+            expect(() => trie.addWord(123)).toThrow("Input must be a valid, non-empty string.");
+            expect(() => trie.addWord(null)).toThrow("Input must be a valid, non-empty string.");
+            expect(() => trie.addWord()).toThrow("Input must be a valid, non-empty string.");
         });
 
     });
@@ -82,8 +82,8 @@ describe('AutoCompleteTrie', () => {
         });
 
         test('should throw an error for invalid inputs during search', () => {
-            expect(() => trie.findWord(123)).toThrow("Invalid input: word must be a string.");
-            expect(() => trie.findWord(null)).toThrow("Invalid input: word must be a string.");
+            expect(() => trie.findWord(123)).toThrow("Input must be a valid, non-empty string.");
+            expect(() => trie.findWord(null)).toThrow("Input must be a valid, non-empty string.");
         });
     });
         // --- טסטים עבור פונקציות עזר ---

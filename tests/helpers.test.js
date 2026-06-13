@@ -18,7 +18,7 @@ describe('Helper Functions', () => {
         test('should clean extra spaces and handle multi-word arguments', () => {
             const { command, arg } = parseCommand('   complete    ca   rt  ');
             expect(command).toBe('complete');
-            expect(arg).toBe('ca   rt');
+            expect(arg).toBe('ca rt');
         });
     });
 

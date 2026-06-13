@@ -38,5 +38,6 @@ export class AppController {
                 this.view.displayMessage(`erorr: ${error.message}`);
             }
         }
+        
     }
 }

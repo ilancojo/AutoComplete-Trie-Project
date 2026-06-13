@@ -31,4 +31,29 @@ export class AutoCompleteTrie {
         // נסמן את הצומת הזה כסוף של מילה שלמה
         currentNode.endOfWord = true;
     }
+
+    findWord(word){
+
+        let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
+        word = word.toLowerCase();
+
+        for (const char of word) {
+           
+            if (!currentNode.children[char]) { // אם האות לא קיימת בילדים של הצומת הנוכחי, ניצור עבורה צומת חדש
+                return false
+             }
+             
+             currentNode = currentNode.children[char]; 
+        
+        }
+        return currentNode.endOfWord       
+
+    }
+
+
+
+
+
+
+
 }

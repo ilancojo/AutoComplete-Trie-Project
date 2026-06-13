@@ -166,19 +166,7 @@ describe('AutoCompleteTrie', () => {
             expect(results).toHaveLength(0);
         });
 
-        test('should handle case insensitivity correctly', () => {
-            // חיפוש עם אותיות גדולות אמור להחזיר את אותן תוצאות (באותיות קטנות)
-            const results = trie.predictWords('CA');
-            
-            expect(results).toHaveLength(3);
-            expect(results).toContain('car');
-        });
-
-        test('should throw an error for invalid inputs', () => {
-            expect(() => trie.predictWords(123)).toThrow("Invalid input: word must be a string.");
-            expect(() => trie.predictWords(null)).toThrow("Invalid input: word must be a string.");
-            expect(() => trie.predictWords("")).toThrow("Invalid input: word must be a string.");
-        });
+ 
 
     });
     

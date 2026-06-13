@@ -166,8 +166,15 @@ describe('AutoCompleteTrie', () => {
             expect(results).toHaveLength(0);
         });
 
- 
+        test('should handle case insensitivity correctly', () => {
+            // חיפוש עם אותיות גדולות אמור להחזיר את אותן תוצאות (באותיות קטנות)
+            const results = trie.predictWords('CA');
+            
+            expect(results).toHaveLength(3);
+            expect(results).toContain('car');
+        });
 
+     
     });
     
 

@@ -14,4 +14,5 @@ export const MESSAGES = {
     COMPLETIONS: (prefix, results) => `Suggestions for '${prefix}': ${results.join(', ')}`,
     NO_COMPLETIONS: (prefix) => `✗ No suggestions found for '${prefix}'`,
     PROMPT: "> "
+    
 };

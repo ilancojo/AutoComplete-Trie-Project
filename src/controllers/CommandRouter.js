@@ -1,14 +1,28 @@
 import { MESSAGES } from '../constants/messages.js';
 import { validateInput } from '../utils/helpers.js';
 
+/**
+ * CommandRouter Class
+ * Implements the Command routing pattern to map string commands to specific model/view actions.
+ * This decoupled approach ensures the AppController remains agnostic to specific command logic.
+ */
 export class CommandRouter {
-    // הנתב מקבל את המודל (trie) והתצוגה (view) כדי שיוכל לעבוד איתם
+    /**
+     * @param {AutoCompleteTrie} trie - The application's data model.
+     * @param {ConsoleView} view - The application's presentation layer.
+     */
     constructor(trie, view) {
         this.trie = trie;
         this.view = view;
+        // Pre-compute the command map for O(1) execution lookups
         this.commands = this._registerCommands();
     }
 
+    /**
+     * Defines the execution logic for all supported system commands.
+     * @returns {Object} A dictionary mapping command strings to handler functions.
+     * @private
+     */
     _registerCommands() {
         return {
             'help': () => {
@@ -40,7 +54,11 @@ export class CommandRouter {
         };
     }
 
-    // פונקציה ציבורית שהבקר יקרא לה כדי לבצע פקודה
+    /**
+     * Evaluates and executes a given command string.
+     * @param {string} command - The mapped command action.
+     * @param {string} arg - The parameters required for the action.
+     */
     execute(command, arg) {
         if (this.commands[command]) {
             this.commands[command](arg);

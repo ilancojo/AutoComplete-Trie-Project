@@ -1,98 +1,114 @@
 import { TrieNode } from "./TrieNode.js";
 import { validateInput } from "../utils/helpers.js";
 
-
+/**
+ * AutoCompleteTrie Class
+ * Implements a Prefix Tree (Trie) data structure optimized for fast string retrieval
+ * and autocomplete functionality. Provides O(L) time complexity for insertions and lookups.
+ */
 export class AutoCompleteTrie {
     constructor() {
-    
-        this.root = new TrieNode();  // השורש הוא תמיד צומת ריק שממנו מתחילים כל החיפושים
+        // The root node is intentionally left empty. It serves as the starting 
+        // point for all tree traversals.
+        this.root = new TrieNode();  
     }
 
-
-
+    /**
+     * Inserts a new word into the Trie.
+     * @param {string} word - The word to be inserted.
+     */
     addWord(word) {
         word = validateInput(word);  
-        let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
+        let currentNode = this.root;
         
+        // Traverse the tree, creating new nodes for characters that do not exist
         for (const char of word) {
             if (!currentNode.children[char]) {
                 currentNode.children[char] = new TrieNode(char);
             }
-            currentNode = currentNode.children[char];// נקדם את המצביע שלנו לצומת של האות (הקיימת או החדשה שניצור)
+            currentNode = currentNode.children[char];
         }
-        // כשהלולאה מסתיימת, הגענו לאות האחרונה של המילה
-        // נסמן את הצומת הזה כסוף של מילה שלמה
+        
+        // Mark the final node as a valid word boundary
         currentNode.endOfWord = true;
     }
 
-    findWord(word){
-
+    /**
+     * Checks if a complete word exists in the Trie.
+     * @param {string} word - The word to search for.
+     * @returns {boolean} - True if the exact word is found, false otherwise.
+     */
+    findWord(word) {
         word = validateInput(word);  
-        let currentNode = this.root;// יצירת מצביע שמתחיל בשורש העץ
+        let currentNode = this.root;
         
         for (const char of word) {
-           
-            if (!currentNode.children[char]) { // אם האות לא קיימת בילדים של הצומת הנוכחי, ניצור עבורה צומת חדש
+            // Short-circuit: if a character path is broken, the word doesn't exist
+            if (!currentNode.children[char]) { 
                 return false;
-             }
-    
-             currentNode = currentNode.children[char];// מתקדמים לצומת הבא 
+            }
+            currentNode = currentNode.children[char];
         }        
-        // החזרת הסטטוס של האות האחרונה (האם היא מסומנת כסוף מילה?)
-        return currentNode.endOfWord       
-
+        
+        // Ensure the path represents a complete word, not just a prefix
+        return currentNode.endOfWord;       
     }
 
+    /**
+     * Internal helper: Navigates to the node representing the last character of a prefix.
+     * @param {string} prefix - The prefix to trace.
+     * @returns {TrieNode|null} - The node at the end of the prefix, or null if not found.
+     */
     _getRemainingTree(prefix) {
-
         prefix = validateInput(prefix);
         let currentNode = this.root;
 
         for (const char of prefix) {
-            // אם הגענו לאות שלא קיימת, התחילית כולה לא קיימת בעץ
             if (!currentNode.children[char]) {
                 return null;    
             }
-            // מתקדמים בצומת
             currentNode = currentNode.children[char];
         }
-        return currentNode;// מחזירים את הצומת האחרון שהגענו אליו
+        return currentNode;
     }
 
-
-_allWordsHelper(prefix, node, allWords) {
-        // אם הגענו לסוף מילה, נוסיף את התחילית הנוכחית למערך התוצאות
+    /**
+     * Internal helper: Performs a Depth-First Search (DFS) to collect all valid words.
+     * @param {string} prefix - The accumulated word built during traversal.
+     * @param {TrieNode} node - The current node being inspected.
+     * @param {string[]} allWords - The array collecting valid word matches.
+     */
+    _allWordsHelper(prefix, node, allWords) {
         if (node.endOfWord === true) {
              allWords.push(prefix); 
         }
         
-        // עוברים על כל הילדים (האותיות הבאות) של הצומת הנוכחי
+        // Recursively traverse all child nodes
         for (const char in node.children) {
-            // קריאה רקורסיבית עם התחילית המעודכנת והצומת הבא
             this._allWordsHelper(prefix + char, node.children[char], allWords);
         }
     }
 
-    //"ca" --> [cat , cart , card]
-    predictWords(prefix){
-        // 1. בדיקת תקינות והמרה
+    /**
+     * Retrieves all possible autocomplete suggestions for a given prefix.
+     * @param {string} prefix - The starting string to autocomplete.
+     * @returns {string[]} - An array of suggested words.
+     */
+    predictWords(prefix) {
         prefix = validateInput(prefix); 
 
-        // 2. מציאת נקודת ההתחלה (קריאה לפונקציה פעם אחת בלבד)
+        // Step 1: Navigate to the starting subtree based on the prefix
         let startNode = this._getRemainingTree(prefix);
 
-        // 3. יציאה מוקדמת  אם התחילית לא קיימת
+        // Step 2: Early return if the prefix has no matches in the tree
         if (startNode === null) {
             return [];
         }
 
-        // 4. הכנת מערך התוצאות והפעלת הרקורסיה
+        // Step 3: Initialize results array and trigger recursive DFS
         let results = [];
         this._allWordsHelper(prefix, startNode, results);
         
-        // 5. החזרת התשובה
         return results;
     }
-
-
 }

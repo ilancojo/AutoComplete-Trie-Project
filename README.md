@@ -30,3 +30,36 @@ The application is thoroughly tested using **Jest**, achieving comprehensive cov
    ```bash
    git clone [https://github.com/your-username/AutoComplete-Trie-Project.git](https://github.com/your-username/AutoComplete-Trie-Project.git)
    cd AutoComplete-Trie-Project
+
+2.   Install dependencies:
+
+Bash
+ npm install
+
+
+💻 Usage
+Start the interactive console application:
+
+Bash
+npm start
+
+
+Available Commands:
+add <word> - Add a new word to the dictionary.
+
+find <word> - Check if a specific word exists in the dictionary.
+
+complete <prefix> - Get all autocomplete suggestions for the given prefix.
+
+help - Show the list of available commands.
+
+exit - Quit the program.
+
+
+⚙️ Running Tests
+Execute the Jest test suite:
+
+Bash
+npm test
+
+   

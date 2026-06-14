@@ -7,58 +7,41 @@ describe('CommandRouter', () => {
     let mockView;
     let router;
 
-    // לפני כל טסט, ניצור אובייקטים מדומים מחדש כדי שהטסטים לא ישפיעו אחד על השני
     beforeEach(() => {
-        // מילון "מרגלים" עבור מתודות העץ
+        // Arrange: Inject mock dependencies to isolate routing logic from data processing
         mockTrie = {
             addWord: jest.fn(),
             findWord: jest.fn(),
             predictWords: jest.fn()
         };
 
-        // מילון "מרגלים" עבור מתודות התצוגה
         mockView = {
             displayMessage: jest.fn()
         };
 
-        // יוצרים את הראוטר עם הזיופים
         router = new CommandRouter(mockTrie, mockView);
     });
 
-    // אחרי כל טסט ננקה את הזיכרון של המעקבים
     afterEach(() => {
+        // Teardown: Prevent mock state pollution across tests
         jest.clearAllMocks(); 
     });
 
-/*
-AAA structure: Each test is made up of 3 steps:
-
-Arrange: Setting up the variables (e.g. mockResults).
-
-Act: Calling the function we are testing (router.execute('add', 'apple')).
-
-Assert: Using expect(...). 
-
-*/
-
-
-
     test('should handle "help" command', () => {
+        // Act
         router.execute('help', '');
-        // בודקים שהראוטר אכן הפעיל את ההודעה המתאימה בתצוגה
+        // Assert
         expect(mockView.displayMessage).toHaveBeenCalledWith(MESSAGES.HELP);
     });
 
     test('should handle "add" command with valid word', () => {
         router.execute('add', 'apple');
-        // מוודאים שהמילה נשלחה לעץ
         expect(mockTrie.addWord).toHaveBeenCalledWith('apple');
-        // מוודאים שהודעת ההצלחה נשלחה לתצוגה
         expect(mockView.displayMessage).toHaveBeenCalledWith(MESSAGES.ADDED('apple'));
     });
 
     test('should handle "find" command when word exists', () => {
-        // מגדירים למרגל של העץ להחזיר 'true' הפעם כדי לדמות שהמילה נמצאה
+        // Arrange: Mock the trie returning a successful match
         mockTrie.findWord.mockReturnValue(true); 
         
         router.execute('find', 'apple');
@@ -67,7 +50,6 @@ Assert: Using expect(...).
     });
 
     test('should handle "find" command when word does not exist', () => {
-        // מגדירים למרגל להחזיר 'false' 
         mockTrie.findWord.mockReturnValue(false); 
         
         router.execute('find', 'dog');
@@ -77,7 +59,6 @@ Assert: Using expect(...).
 
     test('should handle "complete" command with results', () => {
         const mockResults = ['apple', 'app', 'application'];
-        // הזרקת תשובה מזויפת לעץ
         mockTrie.predictWords.mockReturnValue(mockResults); 
         
         router.execute('complete', 'app');
@@ -92,11 +73,11 @@ Assert: Using expect(...).
         expect(mockView.displayMessage).toHaveBeenCalledWith(MESSAGES.NO_COMPLETIONS('xyz'));
     });
 
-    test('should handle unknown commands', () => {
+    test('should handle unknown commands securely', () => {
         router.execute('jump', '');
         
         expect(mockView.displayMessage).toHaveBeenCalledWith(MESSAGES.INVALID_CMD);
-        // בדיקה קריטית: מוודאים ששום פעולה לא הופעלה בעץ בטעות
+        // Assert: Ensure no unintended side-effects occur on the data structure
         expect(mockTrie.addWord).not.toHaveBeenCalled(); 
         expect(mockTrie.findWord).not.toHaveBeenCalled();
     });
